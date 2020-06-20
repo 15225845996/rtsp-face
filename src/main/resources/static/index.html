@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+
+<canvas id="outputCanvas"></canvas>
+<canvas id="source" ></canvas>
+
+
+<div id="imgs">
+
+</div>
+
+
+
+<script src="jquery-3.4.1.min.js"></script>
+<script src="face.js"></script>
+<script async src="opencv/opencv.js"></script>
+<script type="text/javascript" src="jsmpeg.min.js"></script>
+
+
+<script type="text/javascript">
+    var num = 0;
+    
+    function syncFace(face,width,height) {
+        var tnCanvas = document.createElement('canvas')
+        var tnCanvasContext = tnCanvas.getContext('2d');
+        var x = face['x']
+        var y = face['y']
+        var w = face['w']
+        var h = face['h']
+        var w1 = w/10
+        var h1 = h/10
+        if(x >= w1){//左边冗余百分之10
+            x = x - w1
+            w += w1;
+        }
+        if(width >= w+w1){
+            w += w1;
+        }
+        if(y >= h1){
+            y = y- h1;
+            h += h1;
+        }
+        if(height >= h+h1){
+            h += h1;
+        }
+        tnCanvas.width = w;
+        tnCanvas.height = h;
+
+		//获取base64
+        tnCanvasContext.drawImage(document.getElementById("source"), x,y,w, h,0,0,w,h);
+        var img=tnCanvas.toDataURL('image/png')
+
+        //获取完整的base64编码
+        img = img.split(',')[1];
+
+        $.ajax({
+			url:"/face/search1",
+			type:"post",
+			data:{
+			    "img":img
+			},
+			success:function (rst) {
+			    if(rst.code == 1){
+                    tnCanvasContext.font = 'bold 14px consolas';
+                    tnCanvasContext.textAlign = 'left';
+                    tnCanvasContext.textBaseline = 'top';
+                    tnCanvasContext.strokeStyle = '#000';
+                    tnCanvasContext.strokeText(rst.name, 0, 0);
+
+                   /* $("#imgs canvas").each(function (i,t) {
+                        var cpmpare = compareFace(tnCanvas,t)
+                        console.log("cpmpare="+cpmpare);
+                    })*/
+                    document.getElementById('imgs').appendChild(tnCanvas)
+				}
+            }
+		})
+    }
+
+    var canvas = document.getElementById('source');
+    var url = 'ws://localhost/rtsp';
+    var player = new JSMpeg.Player(url, {
+        canvas: canvas,
+        onVideoDecode:function(data,aa){//每一帧渲染完成
+        }
+    });
+
+</script>
+</body>
+</html>
