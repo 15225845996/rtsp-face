@@ -84,18 +84,21 @@ public class FaceController {
                 JSONArray users = ((JSONObject) result).get("user_list") == null?
                         null:((JSONArray)((JSONObject) result).get("user_list"));
                 face = faceIsExist(users,isStrange);
-
-                if(-1 == face.getCode() && isStrange){//如果是陌生人  没有找到 就保存到陌生人 人脸库
-                    id = UUID.randomUUID().toString();
-                    name = "陌生人";
-                    HttpUtils.addFace(img, id, name, group);
-
-                    face = new FaceVo();
-                    face.setCode(2);
-                    face.setId(id);
-                    face.setName(name);
-                    CacheMap.put(id, name, cacheTime);
-                }
+            }
+        }
+        if(face == null) {
+            face = new FaceVo();
+        }
+        if(-1 == face.getCode() && isStrange){//如果是陌生人  没有找到 就保存到陌生人 人脸库
+            id = System.currentTimeMillis()+""+(int)(1+Math.random()*(100-1+1));
+            name = "陌生人";
+            res = HttpUtils.addFace(img, id, name, group);
+            if ((Integer) res.get("error_code") == 0) {
+                face = new FaceVo();
+                face.setCode(2);
+                face.setId(id);
+                face.setName(name);
+                CacheMap.put(id, name, cacheTime);
             }
         }
         return face;
