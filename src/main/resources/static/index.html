@@ -55,27 +55,20 @@
         var img=tnCanvas.toDataURL('image/png')
 
         //获取完整的base64编码
-        img = img.split(',')[1];
+        var imgs = img.split(',');
 
         $.ajax({
 			url:"/face/search1",
 			type:"post",
 			data:{
-			    "img":img
+			    "img":imgs[1],
+			    "imgHeand":imgs[0]
 			},
 			success:function (rst) {
 			    if(rst.code == 1){
-                    tnCanvasContext.font = 'bold 14px consolas';
-                    tnCanvasContext.textAlign = 'left';
-                    tnCanvasContext.textBaseline = 'top';
-                    tnCanvasContext.strokeStyle = '#000';
-                    tnCanvasContext.strokeText(rst.name, 0, 0);
-
-                   /* $("#imgs canvas").each(function (i,t) {
-                        var cpmpare = compareFace(tnCanvas,t)
-                        console.log("cpmpare="+cpmpare);
-                    })*/
-                    document.getElementById('imgs').appendChild(tnCanvas)
+                    var img = document.createElement('img')
+                    $(img).attr("src",rst.imgHeand+","+rst.img)
+                    document.getElementById('imgs').appendChild(img)
 				}
             }
 		})

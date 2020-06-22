@@ -14,6 +14,7 @@ public class FaceVo {
 
     /*base64图片信息*/
     private String img;
+    private String imgHeand;
 
     /*人员唯一标示*/
     private String id;

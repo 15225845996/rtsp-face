@@ -47,7 +47,7 @@ public class ConvertVideoPakcet implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         ConvertVideoPakcet convertVideoPakcet = new ConvertVideoPakcet();
-        convertVideoPakcet.pushVideoAsRTSP("rtsp://admin:QJISUS4008950110@192.168.10.214:554/Streaming/Channels/101", "http://localhost/rtsp/receive");
+        convertVideoPakcet.pushVideoAsRTSP("rtsp://admin:QJISUS4008950110@192.168.10.215:554/Streaming/Channels/101", "http://localhost/rtsp/receive");
 
     }
 }

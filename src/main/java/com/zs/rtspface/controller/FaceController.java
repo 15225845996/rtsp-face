@@ -51,6 +51,12 @@ public class FaceController {
         if(result == null){
             result = new FaceVo();
         }
+        if(result.getImg() == null){
+            result.setImg(face.getImg());
+        }
+        if(result.getImgHeand() == null){
+            result.setImgHeand(face.getImgHeand());
+        }
         return result;
     }
 
@@ -68,6 +74,12 @@ public class FaceController {
         }
         if(result == null){
             result = new FaceVo();
+        }
+        if(result.getImg() == null){
+            result.setImg(face.getImg());
+        }
+        if(result.getImgHeand() == null){
+            result.setImgHeand(face.getImgHeand());
         }
         return callback + "(" + JSON.toJSONString(result) + ")";
     }
